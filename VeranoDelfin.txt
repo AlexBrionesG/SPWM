@@ -1,2 +1,7 @@
 Esta es la rama que van a estar editando
+<<<<<<< HEAD
 Ilse Judith Pérez Jiménez
+=======
+
+-Josue
+>>>>>>> c02a03d97cb3d24b838492cbd7573b388a24da6c
