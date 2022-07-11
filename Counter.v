@@ -1,15 +1,16 @@
-module Counter(rst, clk, rst_syn, e, carry, cnt);
-	parameter width = 4, cnt_max = 9;
-	parameter [width-1:0]reset_value = 0;
-	input clk, rst, rst_syn, e;
-	output carry;
-	output reg [width-1:0]cnt;
+module Counter(reset, clock, rst_syn, e, carry, salida_cont);
+	parameter ancho = 14, cnt_max = 9999;
+	parameter [ancho-1:0]reset_value = 0;
 	
-	always @(negedge rst, posedge clk)
-		if(~rst) cnt <= reset_value;
-		else if(rst_syn) cnt <= reset_value;
-		else if(carry) cnt <= reset_value;
-		else if(e) cnt <= cnt + 1'b1;
+	input clock, reset, rst_syn, e;
+	output carry;
+	output reg [ancho-1:0]salida_cont;
+	
+	always @(negedge reset, posedge clock)
+		if(~reset) salida_cont <= reset_value;
+		else if(rst_syn) salida_cont <= reset_value;
+		else if(carry) salida_cont <= reset_value;
+		else if(e) salida_cont <= salida_cont + 1'b1;
 		
-	assign carry = (cnt == cnt_max && e)? 1'b1 : 1'b0;
+	assign carry = (salida_cont == cnt_max && e)? 1'b1 : 1'b0;
 endmodule
