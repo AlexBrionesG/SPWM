@@ -1,6 +1,6 @@
-module Variador_frecuencia_2(reset, clock, pwm_Pos, pwm_Neg, Aumenta, Disminuye, Fino, DU, DD, DC); // se agrego sel
-	input reset, clock, Aumenta, Disminuye, Fino;
-	output pwm_Pos, pwm_Neg;
+module Variador_frecuencia_2(reset, clock, pwm_Pos, pwm_Neg, Selec, RxD, Rx_done, Aumenta, Disminuye, Fino, DU, DD, DC); // se agrego sel
+	input reset, clock, Aumenta, Disminuye, Fino, Selec, RxD;
+	output pwm_Pos, pwm_Neg, Rx_done;
 	output [7:0] DU, DD, DC;
 	
 	wire rstUpDown, UpDowm, carryUp, carryDown, rdyP, rdyN; 
@@ -9,11 +9,13 @@ module Variador_frecuencia_2(reset, clock, pwm_Pos, pwm_Neg, Aumenta, Disminuye,
 	wire rst_synP, rst_synN, ePWMs, eCount, UpDown;
 	wire [15:0]pwm_in;
 	
-	wire [6:0] Ciclos_pwm; //
+	wire [10:0] Ciclos_pwm; //
 	wire [6:0] Cuenta_pwm; // se agrego
 	wire [15:0] Cte_mul;
 	
-	CounterUpDown #(7,0) CountUp_Down( //se quito el 21
+	wire [7:0] Rx, Frec;
+	
+	CounterUpDown #(11,0) CountUp_Down( //se quito el 21
 	.reset(reset), 
 	.clock(clock), 
 	.rst_syn(rstUpDown), 
@@ -59,18 +61,48 @@ module Variador_frecuencia_2(reset, clock, pwm_Pos, pwm_Neg, Aumenta, Disminuye,
 	.UpDown(UpDown), 
 	.rstUpDown(rstUpDown));
 	
-	Selector_pulsador Selector_pulsador(
+	/*
+	Frecuencia Frecuencia(
 	.Aumenta(Aumenta), 
 	.Disminuye(Disminuye), 
 	.Fino(Fino), 
 	.Restablecer(reset), 
+	.Rx(Rx),
+	.Selec(Selec),
 	.clock(clock),
 	.Ciclos_pwm(Ciclos_pwm), 
 	.Cte(Cte_mul), 
 	.Display_U(DU), 
 	.Display_D(DD), 
 	.Display_C(DC) );
+	*/
 	
+	Recibe_UART Recibe_UART(
+   .clk(clock),
+   .RxD(RxD),
+   .Rx_done(Rx_done),
+	.RxD_data(Rx) );
 	
+	Calcular Calcular(
+	.Frec(Frec), 
+	.Ciclos_pwm(Ciclos_pwm), 
+	.Cte(Cte_mul) );
+	
+	Display Display(
+	.Frec(Frec), 
+	.Display_U(DU), 
+	.Display_D(DD), 
+	.Display_C(DC) );
+	
+	Frecuencia Frecuencia(
+	.Aumenta(Aumenta), 
+	.Disminuye(Disminuye), 
+	.Fino(Fino), 
+	.Restablecer(reset), 
+	.Rx(Rx),
+	.Selec(Selec),
+	.clock(clock), 
+	.Frec(Frec) );
+
 	
 endmodule

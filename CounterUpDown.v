@@ -1,6 +1,6 @@
 module CounterUpDown(reset, clock, rst_syn, e, UpDown, carryUp, carryDown, cuenta_pwm, Ciclos_pwm);
 	
-	parameter Ancho = 7; // se quito parametro
+	parameter Ancho = 11; // se quito parametro
 	parameter [Ancho-1:0]valor_reset = 0;
 
 	input clock, reset, rst_syn, e, UpDown;
