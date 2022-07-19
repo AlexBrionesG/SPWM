@@ -1,3 +1,12 @@
+//------------------------------------------------------------------------------------------------------------------
+//		Receptor de UART 
+//			Obtenido en el siguiente enlace:
+//			https://github.com/ChandulaNethmal/Implemet-a-UART-link-on-FPGA-with-verilog/blob/master/UART_receiver.v
+//
+//	Este módulo permite recibir datos por el puerto serial.
+//	
+//------------------------------------------------------------------------------------------------------------------
+
 module Recibe_UART(
 	input clk,
 	input RxD,
@@ -57,28 +66,27 @@ wire sampleNow = OversamplingTick && (OversamplingCnt==Oversampling/2-1);
 always @(posedge clk) begin
 //if(Rx_done) Rx_done =0;
 case(RxD_state)
-            4'b0000: if(~RxD_bit)
-                                                begin
-                                                RxD_state <= `ifdef SIMULATION 4'b1000 `else 4'b0001 `endif;  // start bit found?
-                                                Rx_done<=1'b0;
-                                                //Rxdone<=0;
-                                                end
-            4'b0001: if(sampleNow) RxD_state <= 4'b1000;  // sync start bit to sampleNow
-            4'b1000: if(sampleNow) RxD_state <= 4'b1001;  // bit 0
-            4'b1001: if(sampleNow) RxD_state <= 4'b1010;  // bit 1
-            4'b1010: if(sampleNow) RxD_state <= 4'b1011;  // bit 2
-            4'b1011: if(sampleNow) RxD_state <= 4'b1100;  // bit 3
-            4'b1100: if(sampleNow) RxD_state <= 4'b1101;  // bit 4
-            4'b1101: if(sampleNow) RxD_state <= 4'b1110;  // bit 5
-            4'b1110: if(sampleNow) RxD_state <= 4'b1111;  // bit 6
-            4'b1111: if(sampleNow) RxD_state <= 4'b0010;  // bit 7
-            4'b0010: if(sampleNow)                                       // stop bit
-                                                begin
-                                                            RxD_state <= 4'b0000;
-                                                            Rx_done <= 1'b1;
-                                                            //Rxdone<=1;
-                                                end
-            default: RxD_state <= 4'b0000;
+	4'b0000: if(~RxD_bit) begin
+		RxD_state <= `ifdef SIMULATION 4'b1000 `else 4'b0001 `endif;  // start bit found?
+		Rx_done<=1'b0;
+		//Rxdone<=0;
+	end
+	4'b0001: if(sampleNow) RxD_state <= 4'b1000;  // sync start bit to sampleNow
+	4'b1000: if(sampleNow) RxD_state <= 4'b1001;  // bit 0
+	4'b1001: if(sampleNow) RxD_state <= 4'b1010;  // bit 1
+	4'b1010: if(sampleNow) RxD_state <= 4'b1011;  // bit 2
+	4'b1011: if(sampleNow) RxD_state <= 4'b1100;  // bit 3
+	4'b1100: if(sampleNow) RxD_state <= 4'b1101;  // bit 4
+	4'b1101: if(sampleNow) RxD_state <= 4'b1110;  // bit 5
+	4'b1110: if(sampleNow) RxD_state <= 4'b1111;  // bit 6
+	4'b1111: if(sampleNow) RxD_state <= 4'b0010;  // bit 7
+	4'b0010: if(sampleNow) 								 // stop bit
+	begin
+		RxD_state <= 4'b0000;
+		Rx_done <= 1'b1;
+		//Rxdone<=1;
+	end
+	default: RxD_state <= 4'b0000;
 endcase
 end
 

@@ -1,3 +1,11 @@
+//------------------------------------------------------------------------------------------------------------------
+//		Contador
+//
+//	Este módulo es un contador muy básico cuya función es llevar la cuenta para cambiar el valor de la salida del
+//	SPWM cuando el ancho de pulso requerido sea completado.
+//	
+//------------------------------------------------------------------------------------------------------------------
+
 module Counter(reset, clock, rst_syn, e, carry, salida_cont);
 	parameter ancho = 14, cnt_max = 9999;
 	parameter [ancho-1:0]reset_value = 0;

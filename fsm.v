@@ -1,3 +1,15 @@
+//------------------------------------------------------------------------------------------------------------------
+//		Máquina de Estados Finitos
+//
+//	Este módulo es el corazón del generador del SPWM, pues ejecuta la secuencia que va coordinar todos los demás
+//	módulos. Básicamente hace la siguiente secuencia: 
+//		1. Generar SPWM ascendente hasta la mitad del ciclo positivo.
+//		2. Generar SPWM descendente hasta el final del ciclo positivo.
+//		3. Generar SPWM ascendente hasta la mitad del ciclo negativo.
+//		4. Generar SPWM descendente hasta el final del ciclo negativo.
+//	
+//------------------------------------------------------------------------------------------------------------------
+
 module fsm(rst, clk, CarryUp, CarryDown, rdyP, rdyN, ePWMs, eCount, rst_synP, rst_synN, UpDown, rstUpDown);
 	input rst, clk, CarryUp, CarryDown, rdyP, rdyN;
 	output ePWMs, eCount, rst_synP, rst_synN, UpDown, rstUpDown;
